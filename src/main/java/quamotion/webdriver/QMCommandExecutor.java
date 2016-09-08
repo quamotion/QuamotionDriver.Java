@@ -7,7 +7,9 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.net.MediaType;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LocalLogs;
@@ -36,7 +38,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     private final HttpClient client;
     private LocalLogs logs;
     private static final BiMap<String, QMCommandInfo> commandInformation;
-    private static Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder().create();
 
     // parameters
     public static final String deviceId = "deviceId";
@@ -59,12 +61,16 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String rebootDevice = "rebootDevice";
     public static final String isReady = "isReady";
     public static final String getProperty = "getProperty";
-
+    public static final String getSessions = "sessions";
+    public static final String elementByCoordinates = "elementByCoordinates";
+    public static final String removeSession = "removeSession";
 
     static
     {
         commandInformation = HashBiMap.<String, QMCommandInfo>create();
         commandInformation.put(takeScreenshot, new QMCommandInfo(String.format("quamotion/device/:%s/screenshot",deviceId), HttpMethod.GET));
+        commandInformation.put(getSessions, new QMCommandInfo(getSessions, HttpMethod.GET));
+        commandInformation.put(removeSession, new QMCommandInfo(String.format("session/:%s", sessionId), HttpMethod.DELETE));
         commandInformation.put(getApplications, new QMCommandInfo("quamotion/app", HttpMethod.GET));
         commandInformation.put(getDevices, new QMCommandInfo("quamotion/device", HttpMethod.GET));
         commandInformation.put(getDeviceInformation, new QMCommandInfo(String.format("quamotion/device/:%s",deviceId), HttpMethod.GET));
@@ -76,6 +82,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(rebootDevice, new QMCommandInfo(String.format("quamotion/device/:%s/reboot",deviceId), HttpMethod.POST));
         commandInformation.put(isReady, new QMCommandInfo(String.format("session/:%s/quamotion/isReady",sessionId), HttpMethod.GET));
         commandInformation.put(getProperty, new QMCommandInfo(String.format("session/:%s/element/:%s/property/:%s",sessionId, elementId, propertyName), HttpMethod.GET));
+        commandInformation.put(elementByCoordinates, new QMCommandInfo(String.format("session/:%s/quamotion/elementByCoordinates",sessionId), HttpMethod.GET));
     }
 
     public QMCommandExecutor() {

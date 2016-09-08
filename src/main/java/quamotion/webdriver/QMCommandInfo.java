@@ -36,5 +36,4 @@ public class QMCommandInfo
     public int hashCode() {
         return Objects.hashCode(new Object[]{this.method, this.url});
     }
-
 }
