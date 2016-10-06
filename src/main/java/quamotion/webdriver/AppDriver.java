@@ -2,10 +2,9 @@ package quamotion.webdriver;
 
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.RemoteWebElement;
-import org.openqa.selenium.remote.Response;
-import org.openqa.selenium.remote.SessionId;
+import org.openqa.selenium.interactions.HasTouchScreen;
+import org.openqa.selenium.interactions.TouchScreen;
+import org.openqa.selenium.remote.*;
 import quamotion.webdriver.models.*;
 
 import java.io.IOException;
@@ -17,10 +16,11 @@ import java.util.Map;
 /**
  * Created by BartSaintGermain on 6/24/2016.
  */
-public class AppDriver extends RemoteWebDriver
+public class AppDriver extends RemoteWebDriver implements HasTouchScreen
 {
     public static String BaseUrl = "http://localhost:17894/wd/hub";
     public static QMCommandExecutor qmCommandExecutor;
+    public TouchScreen touchScreen;
 
     static
     {
@@ -35,6 +35,7 @@ public class AppDriver extends RemoteWebDriver
 
     public AppDriver(AppCapabilities capabilities) throws IOException, InterruptedException {
         super(new URL(BaseUrl), capabilities);
+        this.touchScreen = new RemoteTouchScreen(this.getExecuteMethod());
     }
 
     public void waitUntilReady() throws IOException, InterruptedException {
@@ -125,5 +126,11 @@ public class AppDriver extends RemoteWebDriver
         Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId, QMCommandExecutor.propertyName, propertyName)), Response.class);
 
         return ((Map)response.getValue()).get("Result");
+    }
+
+    @Override
+    public TouchScreen getTouch()
+    {
+        return this.touchScreen;
     }
 }
