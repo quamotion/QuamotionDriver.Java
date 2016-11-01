@@ -1,8 +1,10 @@
 package quamotion.webdriver;
 
 import com.google.common.collect.ImmutableMap;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.HasTouchScreen;
+import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.*;
 import quamotion.webdriver.models.*;
@@ -21,6 +23,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
     public static String BaseUrl = "http://localhost:17894/wd/hub";
     public static QMCommandExecutor qmCommandExecutor;
     public TouchScreen touchScreen;
+    private QMKeyboard keyboard;
 
     static
     {
@@ -36,6 +39,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
     public AppDriver(AppCapabilities capabilities) throws IOException, InterruptedException {
         super(new URL(BaseUrl), capabilities);
         this.touchScreen = new RemoteTouchScreen(this.getExecuteMethod());
+        this.keyboard = new QMKeyboard(this);
     }
 
     public void waitUntilReady() throws IOException, InterruptedException {
@@ -43,6 +47,27 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         {
             Thread.sleep(1000);
         }
+    }
+
+    public void clearText() throws IOException
+    {
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.clearText, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())));
+    }
+
+    public void scrollTo(WebElement element, String marked) throws IOException
+    {
+        RemoteWebElement remoteWebElement = (RemoteWebElement)element;
+        String elementId = remoteWebElement.getId();
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString(),QMCommandExecutor.elementId, elementId, "marked", marked)));
+    }
+
+    public QMKeyboard getKeyboard() {
+        return keyboard;
+    }
+
+    protected ExecuteMethod getExecuteMethod()
+    {
+        return super.getExecuteMethod();
     }
 
     public static void removeSession(Session session) throws IOException
@@ -59,6 +84,11 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
     {
         Session[] sessions = getSessions();
         return Arrays.stream(getSessions()).filter(session -> session.getDevice().getUniqueId().equals(deviceId)).toArray(Session[]::new);
+    }
+
+    public WebElement findElementByMarked(String marked)
+    {
+        return this.findElement(By.xpath("*[@marked='"+ marked+"']"));
     }
 
     public static void removeAllSessions(String deviceId) throws IOException

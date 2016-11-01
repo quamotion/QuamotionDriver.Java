@@ -61,6 +61,9 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String rebootDevice = "rebootDevice";
     public static final String isReady = "isReady";
     public static final String getProperty = "getProperty";
+    public static final String clearText = "clear";
+    public static final String dismissKeyboard = "dismissKeyboard";
+    public static final String scrollTo = "scrollTo";
     public static final String getSessions = "sessions";
     public static final String elementByCoordinates = "elementByCoordinates";
     public static final String removeSession = "removeSession";
@@ -83,6 +86,9 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(isReady, new QMCommandInfo(String.format("session/:%s/quamotion/isReady",sessionId), HttpMethod.GET));
         commandInformation.put(getProperty, new QMCommandInfo(String.format("session/:%s/element/:%s/property/:%s",sessionId, elementId, propertyName), HttpMethod.GET));
         commandInformation.put(elementByCoordinates, new QMCommandInfo(String.format("session/:%s/quamotion/elementByCoordinates",sessionId), HttpMethod.GET));
+        commandInformation.put(clearText, new QMCommandInfo(String.format("session/:%s/quamotion/clear",sessionId), HttpMethod.POST));
+        commandInformation.put(scrollTo, new QMCommandInfo(String.format("session/:%s/element/:%s/quamotion/scrollTo",sessionId, elementId), HttpMethod.POST));
+        commandInformation.put(dismissKeyboard, new QMCommandInfo(String.format("session/:%s/quamotion/dismissKeyboard",sessionId), HttpMethod.POST));
     }
 
     public QMCommandExecutor() {
