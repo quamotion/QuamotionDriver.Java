@@ -54,11 +54,50 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.clearText, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())));
     }
 
-    public void scrollTo(WebElement element, String marked) throws IOException
+    public void scrollToMarked(WebElement element, String marked) throws IOException
     {
         RemoteWebElement remoteWebElement = (RemoteWebElement)element;
         String elementId = remoteWebElement.getId();
-        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString(),QMCommandExecutor.elementId, elementId, "marked", marked)));
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(
+                QMCommandExecutor.sessionId, this.getSessionId().toString(),
+                QMCommandExecutor.elementId, elementId,
+                "using", "xpath",
+                "value", "//*[@marked='"+ marked + "']")));
+    }
+
+    public void scrollTo(WebElement element, String xpath) throws IOException
+    {
+        RemoteWebElement remoteWebElement = (RemoteWebElement)element;
+        String elementId = remoteWebElement.getId();
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(
+                QMCommandExecutor.sessionId, this.getSessionId().toString(),
+                QMCommandExecutor.elementId, elementId,
+                "using", "xpath",
+                "value", xpath)));
+    }
+
+    public void scrollUpTo(WebElement element, String xpath) throws IOException
+    {
+        RemoteWebElement remoteWebElement = (RemoteWebElement)element;
+        String elementId = remoteWebElement.getId();
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(
+                QMCommandExecutor.sessionId, this.getSessionId().toString(),
+                QMCommandExecutor.elementId, elementId,
+                "using", "xpath",
+                "value", xpath,
+                "direction", "Up" )));
+    }
+
+    public void scrollDownTo(WebElement element, String xpath) throws IOException
+    {
+        RemoteWebElement remoteWebElement = (RemoteWebElement)element;
+        String elementId = remoteWebElement.getId();
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(
+                QMCommandExecutor.sessionId, this.getSessionId().toString(),
+                QMCommandExecutor.elementId, elementId,
+                "using", "xpath",
+                "value", xpath,
+                "direction", "Down" )));
     }
 
     public QMKeyboard getKeyboard() {
