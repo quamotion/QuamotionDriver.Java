@@ -1,6 +1,8 @@
 package quamotion.webdriver;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.HasTouchScreen;
@@ -12,6 +14,7 @@ import quamotion.webdriver.models.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -38,6 +41,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
 
     public AppDriver(AppCapabilities capabilities) throws IOException, InterruptedException {
         super(new URL(BaseUrl), capabilities);
+
         this.touchScreen = new RemoteTouchScreen(this.getExecuteMethod());
         this.keyboard = new QMKeyboard(this);
     }
@@ -86,6 +90,11 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
                 "using", "xpath",
                 "value", xpath,
                 "direction", "Up" )));
+    }
+
+    public Source getSource() throws IOException
+    {
+        return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.source, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())), Source.class);
     }
 
     public void scrollDownTo(WebElement element, String xpath) throws IOException
@@ -190,6 +199,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId, QMCommandExecutor.propertyName, propertyName)), Device.class);
     }
 
+
     public static Session[] getSessions() throws IOException {
         GetSessionsResponse response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getSessions), GetSessionsResponse.class);
         return (Session[])response.getValue();
@@ -200,6 +210,15 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         String elementId = remoteWebElement.getId();
         String sessionId = this.getSessionId().toString();
         Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId, QMCommandExecutor.propertyName, propertyName)), Response.class);
+
+        return ((Map)response.getValue()).get("Result");
+    }
+
+    public Object getProperties(WebElement webElement) throws IOException {
+        RemoteWebElement remoteWebElement = (RemoteWebElement)webElement;
+        String elementId = remoteWebElement.getId();
+        String sessionId = this.getSessionId().toString();
+        Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId)), Response.class);
 
         return ((Map)response.getValue()).get("Result");
     }
