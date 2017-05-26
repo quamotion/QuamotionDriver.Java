@@ -3,6 +3,7 @@ package quamotion.webdriver.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by BartSaintGermain on 5/15/2017.
@@ -32,6 +33,9 @@ public class Widget
 
     @SerializedName("visible")
     private boolean visible;
+
+    @SerializedName("properties")
+    private HashMap<String, Object> properties;
 
     public ArrayList<Widget> getChildren() {
         return children;
@@ -95,5 +99,13 @@ public class Widget
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public HashMap<String, Object> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(HashMap<String, Object> properties) {
+        this.properties = properties;
     }
 }

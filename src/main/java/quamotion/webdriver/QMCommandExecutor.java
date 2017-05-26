@@ -89,7 +89,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(isReady, new QMCommandInfo(String.format("session/:%s/quamotion/isReady",sessionId), HttpMethod.GET));
         commandInformation.put(getProperty, new QMCommandInfo(String.format("session/:%s/element/:%s/property/:%s",sessionId, elementId, propertyName), HttpMethod.GET));
         commandInformation.put(getProperties, new QMCommandInfo(String.format("session/:%s/element/:%s/property",sessionId, elementId), HttpMethod.GET));
-        commandInformation.put(elementByCoordinates, new QMCommandInfo(String.format("session/:%s/quamotion/elementByCoordinates",sessionId), HttpMethod.GET));
+        commandInformation.put(elementByCoordinates, new QMCommandInfo(String.format("session/:%s/quamotion/elementByCoordinates",sessionId), HttpMethod.POST));
         commandInformation.put(clickByCoordinates, new QMCommandInfo(String.format("session/:%s/touch/clickByCoordinate",sessionId), HttpMethod.POST));
         commandInformation.put(clearText, new QMCommandInfo(String.format("session/:%s/quamotion/clear",sessionId), HttpMethod.POST));
         commandInformation.put(scrollTo, new QMCommandInfo(String.format("session/:%s/element/:%s/quamotion/scrollTo",sessionId, elementId), HttpMethod.POST));

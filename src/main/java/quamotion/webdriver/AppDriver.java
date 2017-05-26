@@ -11,6 +11,7 @@ import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.*;
 import quamotion.webdriver.models.*;
 
+import javax.lang.model.element.Element;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -221,6 +222,14 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId)), Response.class);
 
         return ((Map)response.getValue()).get("Result");
+    }
+
+    public ElementAction findElementByCoordinate(int x, int y) throws IOException {
+        return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.elementByCoordinates, ImmutableMap.<String, String>of(
+                QMCommandExecutor.sessionId, this.getSessionId().toString(),
+                "x", Integer.toString(x),
+                "y", Integer.toString(y))),
+                FindElementByCoordinateResponse.class).getValue();
     }
 
     @Override
