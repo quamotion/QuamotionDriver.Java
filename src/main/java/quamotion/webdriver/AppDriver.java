@@ -99,6 +99,13 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
                 "value", xpath,
                 "direction", "Down" )));
     }
+    public void clickByCoordinate(int x, int y) throws IOException
+    {
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.clickByCoordinates, ImmutableMap.<String, String>of(
+                QMCommandExecutor.sessionId, this.getSessionId().toString(),
+                "x", Integer.toString(x ),
+                "y", Integer.toString(y ))));
+    }
 
     public QMKeyboard getKeyboard() {
         return keyboard;

@@ -66,6 +66,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String scrollTo = "scrollTo";
     public static final String getSessions = "sessions";
     public static final String elementByCoordinates = "elementByCoordinates";
+    public static final String clickByCoordinates = "clickByCoordinates";
     public static final String removeSession = "removeSession";
 
     static
@@ -86,6 +87,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(isReady, new QMCommandInfo(String.format("session/:%s/quamotion/isReady",sessionId), HttpMethod.GET));
         commandInformation.put(getProperty, new QMCommandInfo(String.format("session/:%s/element/:%s/property/:%s",sessionId, elementId, propertyName), HttpMethod.GET));
         commandInformation.put(elementByCoordinates, new QMCommandInfo(String.format("session/:%s/quamotion/elementByCoordinates",sessionId), HttpMethod.GET));
+        commandInformation.put(clickByCoordinates, new QMCommandInfo(String.format("session/:%s/touch/clickByCoordinate",sessionId), HttpMethod.POST));
         commandInformation.put(clearText, new QMCommandInfo(String.format("session/:%s/quamotion/clear",sessionId), HttpMethod.POST));
         commandInformation.put(scrollTo, new QMCommandInfo(String.format("session/:%s/element/:%s/quamotion/scrollTo",sessionId, elementId), HttpMethod.POST));
         commandInformation.put(dismissKeyboard, new QMCommandInfo(String.format("session/:%s/quamotion/dismissKeyboard",sessionId), HttpMethod.POST));
