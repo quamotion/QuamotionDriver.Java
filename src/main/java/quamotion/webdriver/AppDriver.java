@@ -98,6 +98,17 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.source, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())), Source.class);
     }
 
+    public String getPageSource() {
+        Gson gson = new GsonBuilder().create();
+        try
+        {
+            return gson.toJson(this.getSource());
+        } catch (IOException e)
+        {
+            return e.getMessage();
+        }
+    }
+
     public void scrollDownTo(WebElement element, String xpath) throws IOException
     {
         RemoteWebElement remoteWebElement = (RemoteWebElement)element;
