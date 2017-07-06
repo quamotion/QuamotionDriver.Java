@@ -207,11 +207,6 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.rebootDevice, ImmutableMap.<String, String>of(QMCommandExecutor.deviceId, deviceId)));
     }
 
-    public Object getProperty(String sessionId, String elementId, String propertyName) throws IOException {
-        return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId, QMCommandExecutor.propertyName, propertyName)), Device.class);
-    }
-
-
     public static Session[] getSessions() throws IOException {
         GetSessionsResponse response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getSessions), GetSessionsResponse.class);
         return (Session[])response.getValue();
@@ -223,16 +218,16 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         String sessionId = this.getSessionId().toString();
         Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId, QMCommandExecutor.propertyName, propertyName)), Response.class);
 
-        return ((Map)response.getValue()).get("Result");
+        return response.getValue();
     }
 
-    public Object getProperties(WebElement webElement) throws IOException {
+    public Map getProperties(WebElement webElement) throws IOException {
         RemoteWebElement remoteWebElement = (RemoteWebElement)webElement;
         String elementId = remoteWebElement.getId();
         String sessionId = this.getSessionId().toString();
-        Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId)), Response.class);
+        Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperties, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId)), Response.class);
 
-        return ((Map)response.getValue()).get("Result");
+        return (Map)response.getValue();
     }
 
     public ElementAction findElementByCoordinate(int x, int y) throws IOException {
