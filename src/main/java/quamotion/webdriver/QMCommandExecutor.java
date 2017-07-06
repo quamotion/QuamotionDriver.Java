@@ -47,6 +47,8 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String sessionId = "sessionId";
     public static final String elementId = "elementId";
     public static final String propertyName = "propertyName";
+    public static final String success = "Success";
+    public static final String message = "Message";
 
     // operations
     public static final String takeScreenshot = "takeScreenshot";
@@ -61,6 +63,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String rebootDevice = "rebootDevice";
     public static final String isReady = "isReady";
     public static final String getProperty = "getProperty";
+    public static final String reportStatus = "reportStatus";
     public static final String getProperties = "getProperties";
     public static final String clearText = "clear";
     public static final String dismissKeyboard = "dismissKeyboard";
@@ -88,6 +91,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(rebootDevice, new QMCommandInfo(String.format("quamotion/device/:%s/reboot",deviceId), HttpMethod.POST));
         commandInformation.put(isReady, new QMCommandInfo(String.format("session/:%s/quamotion/isReady",sessionId), HttpMethod.GET));
         commandInformation.put(getProperty, new QMCommandInfo(String.format("session/:%s/element/:%s/property/:%s",sessionId, elementId, propertyName), HttpMethod.GET));
+        commandInformation.put(reportStatus, new QMCommandInfo(String.format("session/:%s/report_status",sessionId), HttpMethod.POST));
         commandInformation.put(getProperties, new QMCommandInfo(String.format("session/:%s/element/:%s/property",sessionId, elementId), HttpMethod.GET));
         commandInformation.put(elementByCoordinates, new QMCommandInfo(String.format("session/:%s/quamotion/elementByCoordinates",sessionId), HttpMethod.POST));
         commandInformation.put(clickByCoordinates, new QMCommandInfo(String.format("session/:%s/touch/clickByCoordinate",sessionId), HttpMethod.POST));

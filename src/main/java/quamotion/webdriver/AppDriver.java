@@ -230,6 +230,11 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         return (Map)response.getValue();
     }
 
+    public void reportStatus(boolean success, String message) throws IOException {
+        String sessionId = this.getSessionId().toString();
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.reportStatus, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.success, Boolean.toString(success), QMCommandExecutor.message, message )));
+    }
+
     public ElementAction findElementByCoordinate(int x, int y) throws IOException {
         return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.elementByCoordinates, ImmutableMap.<String, String>of(
                 QMCommandExecutor.sessionId, this.getSessionId().toString(),
