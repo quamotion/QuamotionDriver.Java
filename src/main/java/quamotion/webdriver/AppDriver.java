@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.interactions.Keyboard;
@@ -27,7 +28,9 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
     public static String BaseUrl = "http://localhost:17894/wd/hub";
     public static QMCommandExecutor qmCommandExecutor;
     public TouchScreen touchScreen;
+
     private QMKeyboard keyboard;
+    private Validator validator;
 
     static
     {
@@ -45,6 +48,12 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
 
         this.touchScreen = new RemoteTouchScreen(this.getExecuteMethod());
         this.keyboard = new QMKeyboard(this);
+
+        // add default validator
+        AggregateValidator validator = new AggregateValidator();
+        Validator reportValidator = new ReportValidator(this);
+        validator.AddValidator(reportValidator);
+        this.setValidator(validator);
     }
 
     public void waitUntilReady() throws IOException, InterruptedException {
@@ -126,6 +135,16 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
                 QMCommandExecutor.sessionId, this.getSessionId().toString(),
                 "x", Integer.toString(x ),
                 "y", Integer.toString(y ))));
+    }
+
+    public Validator getValidator()
+    {
+        return this.validator;
+    }
+
+    public void setValidator(Validator validator)
+    {
+        this.validator = validator;
     }
 
     public QMKeyboard getKeyboard() {
