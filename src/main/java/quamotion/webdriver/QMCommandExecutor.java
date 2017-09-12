@@ -73,6 +73,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String clickByCoordinates = "clickByCoordinates";
     public static final String removeSession = "removeSession";
     public static final String source = "source";
+    public static final String flickCoordinate = "flickCoordinate";
 
     static
     {
@@ -99,6 +100,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(scrollTo, new QMCommandInfo(String.format("session/:%s/element/:%s/quamotion/scrollTo",sessionId, elementId), HttpMethod.POST));
         commandInformation.put(dismissKeyboard, new QMCommandInfo(String.format("session/:%s/quamotion/dismissKeyboard",sessionId), HttpMethod.POST));
         commandInformation.put(source, new QMCommandInfo(String.format("session/:%s/source",sessionId), HttpMethod.GET));
+        commandInformation.put(flickCoordinate, new QMCommandInfo(String.format("session/:%s/touch/flick",sessionId), HttpMethod.POST));
     }
 
     public QMCommandExecutor() {

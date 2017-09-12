@@ -23,8 +23,7 @@ import java.util.Map;
 /**
  * Created by BartSaintGermain on 6/24/2016.
  */
-public class AppDriver extends RemoteWebDriver implements HasTouchScreen
-{
+public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
     public static String BaseUrl = "http://localhost:17894/wd/hub";
     public static QMCommandExecutor qmCommandExecutor;
     public TouchScreen touchScreen;
@@ -32,13 +31,10 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
     private QMKeyboard keyboard;
     private Validator validator;
 
-    static
-    {
-        try
-        {
+    static {
+        try {
             qmCommandExecutor = new QMCommandExecutor(new URL(BaseUrl));
-        } catch (MalformedURLException exc)
-        {
+        } catch (MalformedURLException exc) {
             throw new IllegalStateException("Error while initializing the quamotion.webdriver.QMCommandExecutor", exc);
         }
     }
@@ -57,31 +53,27 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
     }
 
     public void waitUntilReady() throws IOException, InterruptedException {
-        while (!isReady().isReady())
-        {
+        while (!isReady().isReady()) {
             Thread.sleep(1000);
         }
     }
 
-    public void clearText() throws IOException
-    {
+    public void clearText() throws IOException {
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.clearText, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())));
     }
 
-    public void scrollToMarked(WebElement element, String marked) throws IOException
-    {
-        RemoteWebElement remoteWebElement = (RemoteWebElement)element;
+    public void scrollToMarked(WebElement element, String marked) throws IOException {
+        RemoteWebElement remoteWebElement = (RemoteWebElement) element;
         String elementId = remoteWebElement.getId();
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(
                 QMCommandExecutor.sessionId, this.getSessionId().toString(),
                 QMCommandExecutor.elementId, elementId,
                 "using", "xpath",
-                "value", "//*[@marked='"+ marked + "']")));
+                "value", "//*[@marked='" + marked + "']")));
     }
 
-    public void scrollTo(WebElement element, String xpath) throws IOException
-    {
-        RemoteWebElement remoteWebElement = (RemoteWebElement)element;
+    public void scrollTo(WebElement element, String xpath) throws IOException {
+        RemoteWebElement remoteWebElement = (RemoteWebElement) element;
         String elementId = remoteWebElement.getId();
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(
                 QMCommandExecutor.sessionId, this.getSessionId().toString(),
@@ -90,60 +82,67 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
                 "value", xpath)));
     }
 
-    public void scrollUpTo(WebElement element, String xpath) throws IOException
-    {
-        RemoteWebElement remoteWebElement = (RemoteWebElement)element;
+    public void scrollUpTo(WebElement element, String xpath) throws IOException {
+        RemoteWebElement remoteWebElement = (RemoteWebElement) element;
         String elementId = remoteWebElement.getId();
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(
                 QMCommandExecutor.sessionId, this.getSessionId().toString(),
                 QMCommandExecutor.elementId, elementId,
                 "using", "xpath",
                 "value", xpath,
-                "direction", "Up" )));
+                "direction", "Up")));
     }
 
-    public Source getSource() throws IOException
-    {
+    public Source getSource() throws IOException {
         return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.source, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())), Source.class);
     }
 
     public String getPageSource() {
         Gson gson = new GsonBuilder().create();
-        try
-        {
+        try {
             return gson.toJson(this.getSource());
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             return e.getMessage();
         }
     }
 
-    public void scrollDownTo(WebElement element, String xpath) throws IOException
-    {
-        RemoteWebElement remoteWebElement = (RemoteWebElement)element;
+    public void flickByCoordinate(WebElement element, int x, int y, int xOffset, int yOffset, int speed) throws IOException {
+        ImmutableMap.Builder builder = new ImmutableMap.Builder();
+        RemoteWebElement remoteWebElement = (RemoteWebElement) element;
+        String elementId = remoteWebElement.getId();
+        builder.put(QMCommandExecutor.sessionId, this.getSessionId().toString())
+                .put("element", elementId)
+                .put("xCoordinate", Integer.toString(x))
+                .put("yCoordinate", Integer.toString(y))
+                .put("xoffset", Integer.toString(xOffset))
+                .put("yoffset", Integer.toString(yOffset))
+                .put("speed", Integer.toString(y));
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.flickCoordinate, builder.build()));
+    }
+
+    public void scrollDownTo(WebElement element, String xpath) throws IOException {
+        RemoteWebElement remoteWebElement = (RemoteWebElement) element;
         String elementId = remoteWebElement.getId();
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.scrollTo, ImmutableMap.<String, String>of(
                 QMCommandExecutor.sessionId, this.getSessionId().toString(),
                 QMCommandExecutor.elementId, elementId,
                 "using", "xpath",
                 "value", xpath,
-                "direction", "Down" )));
-    }
-    public void clickByCoordinate(int x, int y) throws IOException
-    {
-        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.clickByCoordinates, ImmutableMap.<String, String>of(
-                QMCommandExecutor.sessionId, this.getSessionId().toString(),
-                "x", Integer.toString(x ),
-                "y", Integer.toString(y ))));
+                "direction", "Down")));
     }
 
-    public Validator getValidator()
-    {
+    public void clickByCoordinate(int x, int y) throws IOException {
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.clickByCoordinates, ImmutableMap.<String, String>of(
+                QMCommandExecutor.sessionId, this.getSessionId().toString(),
+                "x", Integer.toString(x),
+                "y", Integer.toString(y))));
+    }
+
+    public Validator getValidator() {
         return this.validator;
     }
 
-    public void setValidator(Validator validator)
-    {
+    public void setValidator(Validator validator) {
         this.validator = validator;
     }
 
@@ -151,43 +150,36 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         return keyboard;
     }
 
-    protected ExecuteMethod getExecuteMethod()
-    {
+    protected ExecuteMethod getExecuteMethod() {
         return super.getExecuteMethod();
     }
 
-    public static void removeSession(Session session) throws IOException
-    {
+    public static void removeSession(Session session) throws IOException {
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.removeSession, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, session.getId())));
     }
 
-    public static void removeSession(String sessionId) throws IOException
-    {
+    public static void removeSession(String sessionId) throws IOException {
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.removeSession, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId)));
     }
 
-    public static Session[] getSessions(String deviceId) throws IOException
-    {
+    public static Session[] getSessions(String deviceId) throws IOException {
         Session[] sessions = getSessions();
         return Arrays.stream(getSessions()).filter(session -> session.getDevice().getUniqueId().equals(deviceId)).toArray(Session[]::new);
     }
 
-    public WebElement findElementByMarked(String marked)
-    {
-        return this.findElement(By.xpath("*[@marked='"+ marked+"']"));
+    public WebElement findElementByMarked(String marked) {
+        return this.findElement(By.xpath("*[@marked='" + marked + "']"));
     }
 
-    public static void removeAllSessions(String deviceId) throws IOException
-    {
+    public static void removeAllSessions(String deviceId) throws IOException {
         Session[] sessions = getSessions(deviceId);
-        for(Session session: sessions)
-        {
+        for (Session session : sessions) {
             removeSession(session);
         }
     }
 
     public Status isReady() throws IOException {
-        return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.isReady, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())),Status.class);
+        return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.isReady, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())), Status.class);
     }
 
     public static Device getDeviceInformation(String deviceId) throws IOException {
@@ -198,7 +190,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
         return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getDevices), Device[].class);
     }
 
-    public static Application[] getApplications() throws IOException{
+    public static Application[] getApplications() throws IOException {
         return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getApplications), Application[].class);
     }
 
@@ -228,11 +220,11 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
 
     public static Session[] getSessions() throws IOException {
         GetSessionsResponse response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getSessions), GetSessionsResponse.class);
-        return (Session[])response.getValue();
+        return (Session[]) response.getValue();
     }
 
-    public Object getProperty(WebElement webElement, String propertyName) throws IOException{
-        RemoteWebElement remoteWebElement = (RemoteWebElement)webElement;
+    public Object getProperty(WebElement webElement, String propertyName) throws IOException {
+        RemoteWebElement remoteWebElement = (RemoteWebElement) webElement;
         String elementId = remoteWebElement.getId();
         String sessionId = this.getSessionId().toString();
         Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId, QMCommandExecutor.propertyName, propertyName)), Response.class);
@@ -241,17 +233,17 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
     }
 
     public Map getProperties(WebElement webElement) throws IOException {
-        RemoteWebElement remoteWebElement = (RemoteWebElement)webElement;
+        RemoteWebElement remoteWebElement = (RemoteWebElement) webElement;
         String elementId = remoteWebElement.getId();
         String sessionId = this.getSessionId().toString();
         Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperties, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId)), Response.class);
 
-        return (Map)response.getValue();
+        return (Map) response.getValue();
     }
 
     public void reportStatus(boolean success, String message) throws IOException {
         String sessionId = this.getSessionId().toString();
-        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.reportStatus, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.success, Boolean.toString(success), QMCommandExecutor.message, message )));
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.reportStatus, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.success, Boolean.toString(success), QMCommandExecutor.message, message)));
     }
 
     public ElementAction findElementByCoordinate(int x, int y) throws IOException {
@@ -263,8 +255,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen
     }
 
     @Override
-    public TouchScreen getTouch()
-    {
+    public TouchScreen getTouch() {
         return this.touchScreen;
     }
 }
