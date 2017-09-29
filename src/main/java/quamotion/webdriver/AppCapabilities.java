@@ -5,33 +5,28 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 /**
  * Created by BartSaintGermain on 6/24/2016.
  */
-public class AppCapabilities  extends DesiredCapabilities
-{
+public class AppCapabilities extends MobileCapabilities {
 
-    public AppCapabilities(String deviceId, String appId)
-    {
+    public AppCapabilities(String deviceId, String appId) {
         this(deviceId, appId, true);
     }
 
-    public AppCapabilities(String deviceId, String appId, boolean clearApplicationSettings)
-    {
+    public AppCapabilities(String deviceId, String appId, boolean clearApplicationSettings) {
         this(deviceId, appId, null, clearApplicationSettings);
     }
 
-    public AppCapabilities(String deviceId, String appId,String appVersion, boolean clearApplicationSettings)
-    {
+    public AppCapabilities(String deviceId, String appId, String appVersion, boolean clearApplicationSettings) {
+        super("Native", deviceId, true);
         this.setCapability("deviceId", deviceId);
         this.setCapability("applicationType", "Native");
         this.setCapability("appId", appId);
-        if(appVersion != null)
-        {
+        if (appVersion != null) {
             this.setCapability("appVersion", appVersion);
         }
         this.setCapability("clearApplicationSettings", clearApplicationSettings);
     }
 
-    public void reuseSession(boolean reuseSession)
-    {
+    public void reuseSession(boolean reuseSession) {
         this.setCapability("reuseExistingSession", reuseSession);
     }
 }
