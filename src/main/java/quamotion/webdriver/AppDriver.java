@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,7 +40,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
         }
     }
 
-    public AppDriver(AppCapabilities capabilities) throws IOException, InterruptedException {
+    public AppDriver(MobileCapabilities capabilities) throws IOException, InterruptedException {
         super(new URL(BaseUrl), capabilities);
 
         this.touchScreen = new RemoteTouchScreen(this.getExecuteMethod());
@@ -104,6 +105,17 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
         } catch (IOException e) {
             return e.getMessage();
         }
+    }
+
+    public String[] getAlertButtons() throws IOException {
+        return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getAlertButtons, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())), String[].class);
+    }
+
+    public void clickAlertButton(String buttonName) throws IOException {
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.clickAlertButton, ImmutableMap.<String, String>of(
+            QMCommandExecutor.sessionId, this.getSessionId().toString(),
+            QMCommandExecutor.alertButtonName, buttonName)));
+
     }
 
     public void flickByCoordinate(WebElement element, int x, int y, int xOffset, int yOffset, int speed) throws IOException {

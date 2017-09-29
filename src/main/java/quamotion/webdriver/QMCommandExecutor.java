@@ -49,6 +49,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String propertyName = "propertyName";
     public static final String success = "Success";
     public static final String message = "Message";
+    public static final String alertButtonName = "alertButtonName";
 
     // operations
     public static final String takeScreenshot = "takeScreenshot";
@@ -74,6 +75,8 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String removeSession = "removeSession";
     public static final String source = "source";
     public static final String flickCoordinate = "flickCoordinate";
+    public static final String getAlertButtons = "getAlertButtons";
+    public static final String clickAlertButton = "clickAlertButton";
 
     static
     {
@@ -101,6 +104,8 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(dismissKeyboard, new QMCommandInfo(String.format("session/:%s/quamotion/dismissKeyboard",sessionId), HttpMethod.POST));
         commandInformation.put(source, new QMCommandInfo(String.format("session/:%s/source",sessionId), HttpMethod.GET));
         commandInformation.put(flickCoordinate, new QMCommandInfo(String.format("session/:%s/touch/flick",sessionId), HttpMethod.POST));
+        commandInformation.put(getAlertButtons, new QMCommandInfo(String.format("session/:%s/alert/buttons",sessionId), HttpMethod.GET));
+        commandInformation.put(clickAlertButton, new QMCommandInfo(String.format("session/:%s/alert/click/:%s",sessionId, alertButtonName), HttpMethod.POST));
     }
 
     public QMCommandExecutor() {
