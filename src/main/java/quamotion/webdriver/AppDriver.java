@@ -108,7 +108,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
     }
 
     public String[] getAlertButtons() throws IOException {
-        return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getAlertButtons, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())), String[].class);
+        return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getAlertButtons, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, this.getSessionId().toString())), GetAlertButtonsResponse.class).getValue();
     }
 
     public void clickAlertButton(String buttonName) throws IOException {
