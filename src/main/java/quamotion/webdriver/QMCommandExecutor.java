@@ -47,6 +47,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String sessionId = "sessionId";
     public static final String elementId = "elementId";
     public static final String propertyName = "propertyName";
+    public static final String propertyValue = "propertyValue";
     public static final String success = "Success";
     public static final String message = "Message";
     public static final String alertButtonName = "alertButtonName";
@@ -64,6 +65,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String rebootDevice = "rebootDevice";
     public static final String isReady = "isReady";
     public static final String getProperty = "getProperty";
+    public static final String setProperty = "setProperty";
     public static final String reportStatus = "reportStatus";
     public static final String getProperties = "getProperties";
     public static final String clearText = "clear";
@@ -77,6 +79,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String flickCoordinate = "flickCoordinate";
     public static final String getAlertButtons = "getAlertButtons";
     public static final String clickAlertButton = "clickAlertButton";
+    public static final String getPerformanceData = "getPerformanceData";
 
     static
     {
@@ -106,6 +109,8 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(flickCoordinate, new QMCommandInfo(String.format("session/:%s/touch/flick",sessionId), HttpMethod.POST));
         commandInformation.put(getAlertButtons, new QMCommandInfo(String.format("session/:%s/alert/buttons",sessionId), HttpMethod.GET));
         commandInformation.put(clickAlertButton, new QMCommandInfo(String.format("session/:%s/alert/click/:%s",sessionId, alertButtonName), HttpMethod.POST));
+        commandInformation.put(setProperty, new QMCommandInfo(String.format("session/:%s/element/:%s/property",sessionId, elementId), HttpMethod.POST));
+        commandInformation.put(getPerformanceData, new QMCommandInfo(String.format("session/:%s/quamotion/performance",sessionId), HttpMethod.GET));
     }
 
     public QMCommandExecutor() {
