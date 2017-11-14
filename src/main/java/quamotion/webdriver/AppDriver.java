@@ -244,6 +244,14 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
         return response.getValue();
     }
 
+    public void setProperty(WebElement webElement, String propertyName, Object propertyValue) throws IOException {
+        RemoteWebElement remoteWebElement = (RemoteWebElement) webElement;
+        String elementId = remoteWebElement.getId();
+        String sessionId = this.getSessionId().toString();
+
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperty, ImmutableMap.<String, Object>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId, QMCommandExecutor.propertyName, propertyName,  QMCommandExecutor.propertyName, propertyValue)), Response.class);
+    }
+
     public Map getProperties(WebElement webElement) throws IOException {
         RemoteWebElement remoteWebElement = (RemoteWebElement) webElement;
         String elementId = remoteWebElement.getId();
@@ -251,6 +259,14 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
         Response response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getProperties, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId, QMCommandExecutor.elementId, elementId)), Response.class);
 
         return (Map) response.getValue();
+    }
+
+    public PerformanceMetric[] getPerformanceData() throws IOException
+    {
+        String sessionId = this.getSessionId().toString();
+        GetPerformanceDataResponse response = qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getPerformanceData, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId)), GetPerformanceDataResponse.class);
+
+        return response.getValue();
     }
 
     public void reportStatus(boolean success, String message) throws IOException {
