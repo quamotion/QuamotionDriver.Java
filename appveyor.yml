@@ -1,19 +1,30 @@
 environment:
   matrix:
     - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+  privatekey:
+    secure: JsUUJKqNY3JahRh07RDSvg==
 
 install:
   # Log versions for debugging
   - java -version
   - mvn --version
+  - choco install -y wget
+  - nuget install secure-file -ExcludeVersion
+  - secure-file\tools\secure-file -decrypt private.key.enc -secret %privatekey%
+  - secure-file\tools\secure-file -decrypt settings.xml.enc -secret %privatekey%
+  - gpg.exe --allow-secret-key-import --import --passphrase %privatekey% --batch --yes --no-tty --no-use-agent private.key
 
 build_script:
   - ps: .\Update-Version.ps1
   - cmd: mvn --batch-mode -DskipTests package
 
 test_script:
-  - mvn --batch-mode test verify
+  - mvn --batch-mode test verify -Dgpg.passphrase=%privatekey%
+
+on_success:
+  - cmd: mvn --settings settings.xml deploy -Dgpg.passphrase=%privatekey%
 
 artifacts:
   - path: pom.xml
   - path: target\QuamotionDriver.Java*.jar
+  - path: target\QuamotionDriver.Java*.asc
