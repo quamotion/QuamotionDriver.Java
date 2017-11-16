@@ -8,7 +8,12 @@ install:
   - mvn --version
 
 build_script:
-  - mvn --batch-mode -DskipTests package
+  - ps: .\Update-Version.ps1
+  - cmd: mvn --batch-mode -DskipTests package
 
 test_script:
   - mvn --batch-mode test verify
+
+artifacts:
+  - path: pom.xml
+  - path: target\QuamotionDriver.Java*.jar
