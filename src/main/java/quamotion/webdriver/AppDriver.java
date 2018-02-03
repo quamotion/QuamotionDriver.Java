@@ -128,7 +128,7 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
                 .put("yCoordinate", Integer.toString(y))
                 .put("xoffset", Integer.toString(xOffset))
                 .put("yoffset", Integer.toString(yOffset))
-                .put("speed", Integer.toString(y));
+                .put("speed", Integer.toString(speed));
         qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.flickCoordinate, builder.build()));
     }
 
