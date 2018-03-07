@@ -1,4 +1,4 @@
-# QuamotionDriver.Java
+# Java client for the Quamotion WebDriver
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hw0f9jep4nhe83v1/branch/master?svg=true)](https://ci.appveyor.com/project/qmfrederik/quamotiondriver-java/branch/master)
 
