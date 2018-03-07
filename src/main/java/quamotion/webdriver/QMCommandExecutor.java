@@ -60,6 +60,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String getInstalledApplications = "getInstalledApplications";
     public static final String deleteApplication = "deleteApplication";
     public static final String deleteSettings = "deleteSettings";
+    public static final String launchApplication = "launchApplication";
     public static final String installApplication2 = "installApplication2";
     public static final String installApplication = "installApplication";
     public static final String rebootDevice = "rebootDevice";
@@ -95,6 +96,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(deleteSettings, new QMCommandInfo(String.format("quamotion/device/:%s/app/:%s/settings",deviceId, appId), HttpMethod.DELETE));
         commandInformation.put(installApplication2, new QMCommandInfo(String.format("quamotion/device/:%s/app/:%s/:%s",deviceId, appId, appVersion), HttpMethod.POST));
         commandInformation.put(installApplication, new QMCommandInfo(String.format("quamotion/device/:%s/app/:%s",deviceId, appId), HttpMethod.POST));
+        commandInformation.put(launchApplication, new QMCommandInfo(String.format("quamotion/device/:%s/app/:%s/launch?strict",deviceId, appId), HttpMethod.POST));
         commandInformation.put(rebootDevice, new QMCommandInfo(String.format("quamotion/device/:%s/reboot",deviceId), HttpMethod.POST));
         commandInformation.put(isReady, new QMCommandInfo(String.format("session/:%s/quamotion/isReady",sessionId), HttpMethod.GET));
         commandInformation.put(getProperty, new QMCommandInfo(String.format("session/:%s/element/:%s/property/:%s",sessionId, elementId, propertyName), HttpMethod.GET));
@@ -190,8 +192,13 @@ public class QMCommandExecutor implements NeedsLocalLogs
             String uri = buildUri(command, commandInfo);
             HttpRequest request = new HttpRequest(commandInfo.getMethod(), uri);
             if(HttpMethod.POST == commandInfo.getMethod()) {
-
                 String content = gson.toJson(command.getParameters());
+
+                if(command.getParameters().containsKey("data"))
+                {
+                    content = (String)command.getParameters().get("data");
+                }
+
                 byte[] data = content.getBytes(Charsets.UTF_8.name());
                 request.setHeader("Content-Type", MediaType.JSON_UTF_8.toString());
 
