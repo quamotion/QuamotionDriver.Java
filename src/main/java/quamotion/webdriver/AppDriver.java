@@ -198,6 +198,10 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
         return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getDeviceInformation, ImmutableMap.<String, String>of(QMCommandExecutor.deviceId, deviceId)), Device.class);
     }
 
+    public static void killApp(String deviceId, String appId) throws IOException {
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.killApp, ImmutableMap.<String, String>of(QMCommandExecutor.deviceId, deviceId, QMCommandExecutor.appId, appId)));
+    }
+
     public static Device[] getDevices() throws IOException {
         return qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.getDevices), Device[].class);
     }
