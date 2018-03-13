@@ -82,6 +82,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
     public static final String clickAlertButton = "clickAlertButton";
     public static final String getPerformanceData = "getPerformanceData";
     public static final String killApp = "killApp";
+    public static final String gotoHomeScreen = "gotoHomeScreen";
 
     static
     {
@@ -115,6 +116,7 @@ public class QMCommandExecutor implements NeedsLocalLogs
         commandInformation.put(setProperty, new QMCommandInfo(String.format("session/:%s/element/:%s/property",sessionId, elementId), HttpMethod.POST));
         commandInformation.put(killApp, new QMCommandInfo(String.format("/quamotion/device/:%s/app/:%s/kill?strict",deviceId, appId), HttpMethod.POST));
         commandInformation.put(getPerformanceData, new QMCommandInfo(String.format("session/:%s/quamotion/performance",sessionId), HttpMethod.GET));
+        commandInformation.put(gotoHomeScreen, new QMCommandInfo(String.format("session/:%s/wda/homescreen",sessionId), HttpMethod.POST));
     }
 
     public QMCommandExecutor() {

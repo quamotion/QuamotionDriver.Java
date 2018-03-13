@@ -244,6 +244,16 @@ public class AppDriver extends RemoteWebDriver implements HasTouchScreen {
         return (Session[]) response.getValue();
     }
 
+	/**
+     * Put the homescreen of the device in front. This method is only implemented for device sessions.
+     * @throws IOException
+     */
+    public void gotoHomeScreen() throws  IOException
+    {
+        String sessionId = this.getSessionId().toString();
+        qmCommandExecutor.execute(new QMCommand(QMCommandExecutor.gotoHomeScreen, ImmutableMap.<String, String>of(QMCommandExecutor.sessionId, sessionId)));
+    }
+
     public Object getProperty(WebElement webElement, String propertyName) throws IOException {
         RemoteWebElement remoteWebElement = (RemoteWebElement) webElement;
         String elementId = remoteWebElement.getId();
